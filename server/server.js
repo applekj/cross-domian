@@ -7,7 +7,8 @@ const path = require('path');
 app.use(bodyParser.json()); 
 app.use(bodyParser.urlencoded({ extended: true })); 
 
-app.all('*',(req,res,next) => {
+//node只能针对url拦截，不能拦截请求类型，all是完全匹配，use是模糊匹配
+app.all('/ajax/postJson',(req,res,next) => {
 	res.set({
 		'Access-Control-Allow-Origin':'http://localhost:3001',//允许http://localhost:3001跨域请求
 		'Access-Control-Allow-Methods':'*',
@@ -18,6 +19,10 @@ app.all('*',(req,res,next) => {
 });
 
 app.get('/ajax',(req,res) => {
+	res.set({
+		'Access-Control-Allow-Origin':'http://localhost:3001',//允许http://localhost:3001跨域请求
+		'Access-Control-Allow-Methods':'*',
+	});
 	let data = {"name":"yilule"};
 	res.jsonp(data); 
 });
