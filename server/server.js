@@ -1,21 +1,30 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const app = express();
 const path = require('path');
 
+//bodyParser将req发送的json字符串转换为json,
+app.use(bodyParser.json()); 
+app.use(bodyParser.urlencoded({ extended: true })); 
+
+app.all('*',(req,res,next) => {
+	res.set({
+		'Access-Control-Allow-Origin':'http://localhost:3001',//允许http://localhost:3001跨域请求
+		'Access-Control-Allow-Methods':'*',
+		'Access-Control-Allow-Headers':'Content-Type',//非简单请求头的Content-Type字段
+		'Access-Control-Max-Age':'3600' //非简单请求预检命令允许缓存1小时
+	});
+	next();
+});
+
 app.get('/ajax',(req,res) => {
 	let data = {"name":"yilule"};
-	/*res.append('Access-Control-Allow-Origin','http://localhost:3001');
-	res.append('Access-Control-Allow-Methods','GET');*/
-	res.append('Access-Control-Allow-Origin','*');
-	res.append('Access-Control-Allow-Methods','*');
-	res.jsonp(data);
+	res.jsonp(data); 
 });
 
 app.post('/ajax/postJson',(req,res) => {
-	res.append('Access-Control-Allow-Origin','*');
-	res.append('Access-Control-Allow-Methods','*');
-	console.log(req.params);
-	res.jsonp(req.params)
+	let data = req.body;
+	res.jsonp(data);
 })
 
 app.listen(3000,err => {

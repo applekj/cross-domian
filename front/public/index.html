@@ -8,20 +8,20 @@
 	<script src="./js/boot.js"></script>
 </head>
 <body>
-  <!-- <button id="btn">测试跨域</button>
-  <img src="http://localhost:3000" alt="#">  -->
+  <button id="btn">测试跨域</button>
+  <!-- <img src="http://localhost:3000" alt="#">  -->
   <script type="text/javascript">
-    /*$("#btn").click(() => {
+    $("#btn").click(() => {
     	$.get("http://localhost:3000/ajax",(data,status) => {
     		console.log(data);
     	})
-    });*/
+    });
 
     //每一个测试用例的超时时间
     jasmine.DEFAULT_TIMEOUT_INTERVAL = 1000;
 
     //请求的接口
-    let base = "http://localhost:3000/";
+    let base = "http://localhost:3000";
 
     //测试模块
     describe("ajax跨域",() => {
@@ -29,7 +29,7 @@
     	it("get请求",done => {
         //服务器返回结果
     		let result;
-    		$.getJSON(base+'ajax').then(jsonObj => {
+    		$.getJSON(base+'/ajax').then(jsonObj => {
     			result = jsonObj;
     		})
         //异步请求，使用setTimeout校验
@@ -47,10 +47,10 @@
         //服务器返回结果
     		let result;
     		$.ajax({
-    			url:base + 'ajax/postJson',
+    			url:base + '/ajax/postJson',
     			type:'post',
     			contentType:'application/json;charset=utf-8',
-    			data:JSON.stringify({name:'yilulePost'}),
+    			data:JSON.stringify({"name":"yilulePost"}),
     			success:json => {
     				result = json;
     			}
