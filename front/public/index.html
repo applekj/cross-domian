@@ -12,11 +12,11 @@
   <!-- <button id="btn">测试跨域</button>
 	<img src="http://localhost:3000" alt="#">  -->
   <script type="text/javascript">
-    /*$("#btn").click(() => {
+    $("#btn").click(() => {
     	$.get("http://localhost:3000/ajax",(data,status) => {
     		console.log(data);
     	})
-    });*/
+    });
 
     //每一个测试用例的超时时间
     jasmine.DEFAULT_TIMEOUT_INTERVAL = 1000;
@@ -74,7 +74,7 @@
     			url:base + '/ajax/postJson',
     			type:'post',
     			contentType:'application/json;charset=utf-8',
-    			data:JSON.stringify({name:'yilulePost'}),
+    			data:JSON.stringify({"name":"yilulePost"}),
     			success:json => {
     				result = json;
     			}
