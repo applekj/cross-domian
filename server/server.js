@@ -21,11 +21,11 @@ app.use('/',(req,res,next) => {
 		'Access-Control-Max-Age':'3600' //非简单请求预检命令允许缓存1小时
 	});
 	next();
-});
+})
 
 app.get('/ajax/getJson',(req,res) => {
 	let data = {"name":"yilule"};
-	res.jsonp(data); 
+	res.jsonp(data);
 });
 
 app.post('/ajax/postJson',(req,res) => {
