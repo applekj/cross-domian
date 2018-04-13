@@ -1,2 +1,4 @@
 /front/node_modules/
 /server/node_modules/
+/front/package-lock.json
+/server/package-lock.json
