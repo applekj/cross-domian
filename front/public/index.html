@@ -3,12 +3,13 @@
 <head>
 	<title>test cross-domian</title>
 	<script src="./js/jquery-1.8.1.js"></script>
+  <link rel="stylesheet" type="text/css" href="./css/jasmine.css">
 	<script src="./js/jasmine.js"></script>
 	<script src="./js/jasmine-html.js"></script>
 	<script src="./js/boot.js"></script>
 </head>
 <body>
-  <button id="btn">测试跨域</button>
+  <!-- <button id="btn">测试跨域</button> -->
   <!-- <img src="http://localhost:3000" alt="#">  -->
   <script type="text/javascript">
     $("#btn").click(() => {
@@ -25,11 +26,42 @@
 
     //测试模块
     describe("ajax跨域",() => {
-      //测试用例
+      /*
+       *解决跨域3种办法，
+       *1、让浏览器不要禁止
+       *2、使用jsonp改变请求类型为js代码，服务端需要支持jsonp
+       *3、跨域解决，a、服务端filter方案,添加响应头支持；b、nginx/apache配置支持
+       *
+       */
+
+      //jsonp测试用例
+      it("jsonp请求",done => {
+        //服务器返回结果
+        let result;
+        $.ajax({
+          url:base + '/ajax/getJson',
+          dataType:"jsonp",
+          cache:true,
+          type:"post",//不起作用，只能get请求
+          success:json => {
+            result = json;
+          }
+        });
+        //异步请求，使用setTimeout校验
+        setTimeout(() => {
+          expect(result).toEqual(
+            {"name":"yilule"}
+          );
+          //校验完成，通知jasmine 
+          done();
+        },100);
+      });
+
+      //get请求测试用例
     	it("get请求",done => {
         //服务器返回结果
     		let result;
-    		$.getJSON(base+'/ajax').then(jsonObj => {
+    		$.getJSON(base+'/ajax/getJson').then(jsonObj => {
     			result = jsonObj;
     		})
         //异步请求，使用setTimeout校验
@@ -42,7 +74,7 @@
         },100);
     	});
 
-    	//测试用例
+    	//post请求测试用例（非简单请求,OPTIONS预检命令）
     	it("post请求",done => {
         //服务器返回结果
     		let result;
@@ -65,28 +97,51 @@
         },100);
     	});
 
-    	/*//测试用例
-    	it("jsonp请求",done => {
-        //服务器返回结果
-    		let result;
-    		$.ajax({
-    			url:base,
-    			dataType:"jsonp",
-    			cache:true,
-    			type:"post",
-    			success:json => {
-    				result = json;
-    			}
-    		});
-        //异步请求，使用setTimeout校验
+      //getCookie请求测试用例
+      it("getCookie请求",done => {
+        let result;
+        $.ajax({
+          type:'get',
+          url:base + '/ajax/getCookie',
+          xhrFields:{
+            withCredentials:true
+          },
+          success:json => {
+            result = json;
+          }
+        });
         setTimeout(() => {
-        	expect(result).toEqual(
-        		{"name":"yilule"}
-        	);
-          //校验完成，通知jasmine 
-        	done();
+          expect(result).toEqual(
+            {"user":"yiluleCookie"}
+          );
+          done();
         },100);
-    	});*/
+      });
+
+      //自定义头跨域
+      it("add header 请求",done => {
+        let result;
+        $.ajax({
+          url:base+'/ajax/getHeader',
+          type:'get',
+          headers:{
+            "x-header1":"AAA"
+          },
+          beforeSend: xhr => {
+            xhr.setRequestHeader("x-header2","BBB")
+          },
+          success:json => {
+            result = json;
+          }
+        });
+        setTimeout(() => {
+          expect(result).toEqual(
+            {"name":"yiluleHeader"}
+          );
+          done();
+        },100);
+      });
+
     });  	
 
   </script>
